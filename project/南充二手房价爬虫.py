@@ -16,7 +16,7 @@ def get_data():
 
     y_list = ['1', '2']
     for y in y_list:
-        for p in range(1, 2):
+        for p in range(1, 100):
 
             url = 'https://nanchong.anjuke.com/sale/p' + str(p) + '-y' + y + '/?from=fangjia'
             print(url)
