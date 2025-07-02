@@ -80,13 +80,13 @@ def get_data():
                     data['房龄'] = '2-5年'
 
                 print(data)
-                with open('project/data.json', 'a', encoding='utf8') as f:
+                with open('project/data/data.json', 'a', encoding='utf8') as f:
                     f.write(json.dumps(data, ensure_ascii=False) + ',\n')
                 data_list.append(data)
             print(p)
 
     df = pd.DataFrame(data_list)
-    df.to_excel('project/数据.xlsx', index=False)
+    df.to_excel('project/data/data.xlsx', index=False)
 
 
 get_data()
