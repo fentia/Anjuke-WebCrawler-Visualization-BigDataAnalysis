@@ -8,11 +8,13 @@
 case/                   # 相关案例与建模代码
 chromedriver/           # Chrome驱动及下载链接
 project/
-  ├── 南充二手房价爬虫.py         # 南充房价爬虫主程序
+  ├── 南充二手房价爬虫.py       # 南充房价爬虫主程序
   ├── data/                    # 数据存储目录
   │   ├── CleanData/           # 清洗后数据
   │   └── OriginalData/        # 原始数据
   ├── dataProcessing/          # 数据处理与统计分析脚本
+  ├── dataAnalysis/            # 数据分析脚本
+  │   └── result/              # 数据分析结果
   └── dataVisualization/       # 数据可视化前端页面
 ```
 
@@ -21,6 +23,7 @@ project/
 - 安居客成都/南充二手房价数据爬取（Selenium）
 - 数据清洗与格式转换
 - 多种统计分析（均价、面积、户型、建造年份等）
+- 数据分析与报告生成（`dataAnalysis` 文件夹）
 - 数据可视化（HTML+JS）
 
 ## 环境依赖
@@ -41,7 +44,10 @@ pip install --only-binary :all: scipy
 ```
 pip install --only-binary=:all: scikit-learn
 ```
-
+#### 安装 statsmodels
+```
+pip install --only-binary=:all: statsmodels
+```
 ## 使用说明
 
 1. 配置好 Chrome 浏览器及 chromedriver 路径。
