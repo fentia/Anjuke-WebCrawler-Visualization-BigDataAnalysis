@@ -17,5 +17,25 @@ with open(input_josn, 'r', encoding='utf-8') as infile:
             '''
             pairs = re.findall(r'"(.*?)"\s*:\s*"(.*?)"', line)
             # 户型
-            houseType = eval(pairs[1][1])
-
+            houseType = pairs[1][1]
+            if houseType == '3室2厅2卫':
+                houseTypeDit['3室2厅2卫'] += 1
+            elif houseType == '4室2厅2卫':
+                houseTypeDit['4室2厅2卫'] += 1
+            elif houseType == '3室1厅2卫':
+                houseTypeDit['3室1厅2卫'] += 1
+            elif houseType == '2室2厅1卫':
+                houseTypeDit['2室2厅1卫'] += 1
+            else:
+                houseTypeDit['其他'] += 1
+print('户型分布统计：')
+# 户型列表
+'''
+{value: 5051, name: '3室2厅2卫'},
+{value: 1310, name: '4室2厅2卫'},
+{value: 18, name: '3室1厅2卫'},
+{value: 410, name: '2室2厅1卫'},
+{value: 1445, name: '其他'},
+'''
+for type, num in houseTypeDit.items():
+    print("{value: " + str(num) + ", name: '" + type + "'},")
