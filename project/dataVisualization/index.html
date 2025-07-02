@@ -40,6 +40,12 @@
                 <div id="yearDistribution" class="chart"></div>
             </div>
             
+            <!-- 建造年份与均价关系折线图 -->
+            <div class="chart-container full-width" style="height: 450px;">
+                <div class="chart-title">建造年份与均价关系</div>
+                <div id="priceYearRelation" class="chart"></div>
+            </div>
+            
             <!-- 房产均价与面积关系散点图 -->
             <div class="chart-container full-width" style="height: 450px;">
                 <div class="chart-title">房产均价与面积关系</div>
@@ -188,6 +194,51 @@
                     name: '房源数量',
                     type: 'line',
                     data: [2, 1, 11, 12, 1, 17, 10, 125, 17, 20, 27, 23, 60, 68, 67, 129, 86, 231, 66, 358, 422, 365, 791, 472, 320, 504, 487, 996, 646, 814, 703, 317, 66],
+                    smooth: true,
+                    lineStyle: {
+                        width: 3,
+                        color: '#91CC75'
+                    },
+                    itemStyle: {
+                        color: '#91CC75'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(145, 204, 117, 0.5)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(145, 204, 117, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            });
+
+            // 建造年份与均价关系折线图
+            const priceYearChart = echarts.init(document.getElementById('priceYearRelation'));
+            priceYearChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1992年', '1993年', '1995年', '1996年', '1997年', '1998年', '1999年', '2000年', '2001年', '2002年', '2003年', '2004年', '2005年', '2006年', '2007年', '2008年', '2009年', '2010年', '2011年', '2012年', '2013年', '2014年', '2015年', '2016年', '2017年', '2018年', '2019年', '2020年', '2021年', '2022年', '2023年', '2024年', '2025年']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '均价(元/㎡)',
+                },
+                series: [{
+                    name: '均价(元/㎡)',
+                    type: 'line',
+                    data: ['3311.50', '5767.00', '4733.55', '5851.00', '4237.00', '3258.12', '3692.10', '4159.02', '3554.12', '3460.35', '3717.07', '3273.13', '3324.67', '3742.91', '3553.13', '3834.99', '4340.17', '4749.09', '4919.82', '5255.25', '5255.61', '5450.33', '5331.75', '5466.88', '5561.40', '5732.96', '5670.22', '5693.17', '5595.42', '5671.56', '9827.17', '5712.42', '5355.95'],
                     smooth: true,
                     lineStyle: {
                         width: 3,
