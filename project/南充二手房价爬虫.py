@@ -14,7 +14,7 @@ def get_data():
 
     data_list = []
 
-    y_list = ['1', '2']
+    y_list = ['1', '2','3','4']
     for y in y_list:
         for p in range(1, 100):
 
