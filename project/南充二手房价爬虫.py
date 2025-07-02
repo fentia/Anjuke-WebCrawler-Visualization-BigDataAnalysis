@@ -62,6 +62,7 @@ def get_data():
 
                 # data['总价'] = sl.select('.property-price-total')[0].text
 
+
                 total_price_elements = sl.select('.property-price-total')
                 if total_price_elements:
                     data['总价'] = total_price_elements[0].text
