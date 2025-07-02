@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南充安居客房产数据洞察系统</title>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>南充安居客房产数据洞察系统</h1>
+        <p>基于南充地区房产数据的多维度分析</p>
+    </div>
+    
+    <div class="container">
+        <div class="dashboard">
+            <!-- 价格区间分布柱状图 -->
+            <div class="chart-container">
+                <div class="chart-title">房产价格区间分布</div>
+                <div id="priceDistribution" class="chart"></div>
+            </div>
+            
+            <!-- 户型分布饼图 -->
+            <div class="chart-container">
+                <div class="chart-title">房产户型分布</div>
+                <div id="layoutDistribution" class="chart"></div>
+            </div>
+            
+            <!-- 区域均价对比雷达图 -->
+            <div class="chart-container">
+                <div class="chart-title">各区房产均价对比(元/㎡)</div>
+                <div id="districtPrice" class="chart"></div>
+            </div>
+            
+            <!-- 建造年份分布折线图 -->
+            <div class="chart-container">
+                <div class="chart-title">房产建造年份分布</div>
+                <div id="yearDistribution" class="chart"></div>
+            </div>
+            
+            <!-- 房产均价与面积关系散点图 -->
+            <div class="chart-container full-width" style="height: 450px;">
+                <div class="chart-title">房产均价与面积关系</div>
+                <div id="priceAreaRelation" class="chart"></div>
+            </div>
+            
+            <!-- 各小区房源数量TOP10 -->
+            <div class="chart-container full-width" style="height: 450px;">
+                <div class="chart-title">房源数量TOP10小区</div>
+                <div id="communityTop10" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化所有图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 价格区间分布柱状图
+            const priceChart = echarts.init(document.getElementById('priceDistribution'));
+            priceChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['30万以下', '30-40万', '40-50万', '50-60万', '60-80万', '80-100万', '100万以上']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '房源数量'
+                },
+                series: [{
+                    name: '房源数量',
+                    type: 'bar',
+                    data: [446, 1072, 1686, 2248, 1943, 501, 338],
+                    itemStyle: {
+                        color: '#5470C6'
+                    }
+                }]
+            });
+
+            // 户型分布饼图
+            const layoutChart = echarts.init(document.getElementById('layoutDistribution'));
+            layoutChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center',
+                    data: ['3室2厅2卫', '4室2厅2卫', '3室1厅2卫', '2室2厅1卫', '其他']
+                },
+                series: [
+                    {
+                        name: '户型分布',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        center: ['40%', '50%'],
+                        data: [
+                            {value: 420, name: '3室2厅2卫'},
+                            {value: 180, name: '4室2厅2卫'},
+                            {value: 80, name: '3室1厅2卫'},
+                            {value: 50, name: '2室2厅1卫'},
+                            {value: 30, name: '其他'}
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        labelLine: {
+                            show: false
+                        }
+                    }
+                ]
+            });
+
+            // 区域均价对比雷达图
+            const districtChart = echarts.init(document.getElementById('districtPrice'));
+            districtChart.setOption({
+                tooltip: {},
+                legend: {
+                    data: ['均价(元/㎡)'],
+                    bottom: 10
+                },
+                radar: {
+                    indicator: [
+                        { name: '高坪区', max: 8000 },
+                        { name: '顺庆区', max: 8000 },
+                        { name: '嘉陵区', max: 8000 },
+                        { name: '阆中市', max: 8000 },
+                        { name: '营山县', max: 8000 },
+                        { name: '南部县', max: 8000 }
+                    ],
+                    splitArea: {
+                        show: false
+                    }
+                },
+                series: [{
+                    name: '区域均价对比',
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [5800, 6500, 5200, 5000, 4800, 4500],
+                            name: '均价(元/㎡)',
+                            areaStyle: {
+                                color: 'rgba(121, 134, 203, 0.4)'
+                            },
+                            lineStyle: {
+                                width: 2
+                            }
+                        }
+                    ]
+                }]
+            });
+
+            // 建造年份分布折线图
+            const yearChart = echarts.init(document.getElementById('yearDistribution'));
+            yearChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['2023年', '2024年', '2025年']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '房源数量'
+                },
+                series: [{
+                    name: '房源数量',
+                    type: 'line',
+                    data: [450, 300, 50],
+                    smooth: true,
+                    lineStyle: {
+                        width: 3,
+                        color: '#91CC75'
+                    },
+                    itemStyle: {
+                        color: '#91CC75'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(145, 204, 117, 0.5)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(145, 204, 117, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            });
+
+            // 房产均价与面积关系散点图
+            const priceAreaChart = echarts.init(document.getElementById('priceAreaRelation'));
+            priceAreaChart.setOption({
+                tooltip: {
+                    formatter: function (param) {
+                        return param.data[2] + '<br>面积: ' + param.data[0] + '㎡<br>均价: ' + param.data[1] + '元/㎡';
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '7%',
+                    bottom: '7%',
+                    containLabel: true
+                },
+                xAxis: {
+                    name: '面积(㎡)',
+                    type: 'value'
+                },
+                yAxis: {
+                    name: '均价(元/㎡)',
+                    type: 'value'
+                },
+                visualMap: {
+                    min: 3000,
+                    max: 8000,
+                    dimension: 1,
+                    orient: 'horizontal',
+                    right: 'center',
+                    bottom: '0%',
+                    inRange: {
+                        color: ['#50a3ba', '#eac736', '#d94e5d']
+                    },
+                    text: ['高均价', '低均价'],
+                    calculable: true
+                },
+                series: [{
+                    name: '均价-面积',
+                    type: 'scatter',
+                    symbolSize: function(data) {
+                        return Math.sqrt(data[0]) * 2;
+                    },
+                    data: [
+                        [80, 5500, '阳光江山公园城'],
+                        [85, 5200, '中南原山'],
+                        [90, 5800, '江东首席'],
+                        [95, 6100, '翡翠城'],
+                        [100, 5400, '文德蓝光未来城'],
+                        [110, 5000, '阳光生态城'],
+                        [120, 4800, '翡翠城二期'],
+                        [130, 4600, '阳光生态城二期'],
+                        [140, 5200, '东湖锦城'],
+                        [150, 5000, '滨江壹号'],
+                        [70, 6500, '阳光云景台'],
+                        [75, 6200, '阳光璀璨江山'],
+                        [105, 5300, '阳光浣溪台'],
+                        [115, 4900, '阳光龙湾生态城'],
+                        [125, 4700, '阳光书香九里']
+                    ],
+                    itemStyle: {
+                        opacity: 0.8,
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }
+                }]
+            });
+
+            // 各小区房源数量TOP10
+            const communityChart = echarts.init(document.getElementById('communityTop10'));
+            communityChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '房源数量'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['阳光江山公园城', '中南原山', '江东首席', '翡翠城', '文德蓝光未来城', '阳光生态城', '翡翠城二期', '阳光生态城二期', '东湖锦城', '滨江壹号'],
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 0
+                    }
+                },
+                series: [{
+                    name: '房源数量',
+                    type: 'bar',
+                    data: [25, 22, 20, 18, 15, 14, 12, 10, 8, 7],
+                    itemStyle: {
+                        color: function(params) {
+                            var colorList = ['#c23531','#2f4554','#61a0a8','#d48265','#91c7ae','#749f83','#ca8622','#bda29a','#6e7074','#546570'];
+                            return colorList[params.dataIndex];
+                        }
+                    },
+                    label: {
+                        show: true,
+                        position: 'right'
+                    }
+                }]
+            });
+
+            // 窗口大小变化时重新调整图表大小
+            window.addEventListener('resize', function() {
+                priceChart.resize();
+                layoutChart.resize();
+                districtChart.resize();
+                yearChart.resize();
+                priceAreaChart.resize();
+                communityChart.resize();
+            });
+        });
+    </script>
+</body>
+</html>
