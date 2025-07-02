@@ -16,7 +16,8 @@ with open(input_josn, 'r', encoding='utf-8') as infile:
             # ('总价', ''), ('均价', ''), ('房龄', '')]
             '''
             pairs = re.findall(r'"(.*?)"\s*:\s*"(.*?)"', line)
-            price = eval(pairs[8][1][0:-1])* 10000  # 将价格转换为整数，单位为元
+            # 将价格转换为整数，单位为元
+            price = eval(pairs[8][1][0:-1])* 10000
             if price < 300000:
                 totalPrice['30万以下'] += 1
             elif 300000 <= price < 400000:
