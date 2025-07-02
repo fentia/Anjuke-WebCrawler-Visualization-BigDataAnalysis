@@ -1,4 +1,4 @@
-# PracticalTraining
+# Anjuke-WebCrawler-Visualization-BigDataAnalysis
 爬虫 & 可视乎 & 大数据分析实战
 
 ### 一、安装二进制预编译库
