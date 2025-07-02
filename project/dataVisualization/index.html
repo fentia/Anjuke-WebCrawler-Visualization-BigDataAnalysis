@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>南充安居客房产数据洞察系统</title>
     <script src="js/echarts.min.js"></script>
-    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -217,7 +217,7 @@
 
             // 房产均价与面积关系散点图
             const priceAreaChart = echarts.init(document.getElementById('priceAreaRelation'));
-            priceAreaChart.setOption({
+            const priceAreaOption = {
                 tooltip: {
                     formatter: function (param) {
                         return param.data[2] + '<br>面积: ' + param.data[0] + '㎡<br>均价: ' + param.data[1] + '元/㎡';
@@ -231,11 +231,14 @@
                 },
                 xAxis: {
                     name: '面积(㎡)',
-                    type: 'value'
+                    type: 'value',
+                    max: 450
                 },
                 yAxis: {
                     name: '均价(元/㎡)',
-                    type: 'value'
+                    type: 'value',
+                    min: 0,
+                    max: 1000000
                 },
                 visualMap: {
                     min: 3000,
@@ -243,42 +246,45 @@
                     dimension: 1,
                     orient: 'horizontal',
                     right: 'center',
-                    bottom: '0%',
+                    top: '1%',
                     inRange: {
                         color: ['#50a3ba', '#eac736', '#d94e5d']
                     },
                     text: ['高均价', '低均价'],
                     calculable: true
                 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        yAxisIndex: 0,
+                        filterMode: 'none',
+                        startValue: 0,
+                        endValue: 20000,
+                        width: 16,
+                        right: 10
+                    }
+                ],
                 series: [{
                     name: '均价-面积',
                     type: 'scatter',
                     symbolSize: function(data) {
-                        return Math.sqrt(data[0]) * 2;
+                        return Math.sqrt(data[0]) * 1.5;
                     },
-                    data: [
-                        [80, 5500, '阳光江山公园城'],
-                        [85, 5200, '中南原山'],
-                        [90, 5800, '江东首席'],
-                        [95, 6100, '翡翠城'],
-                        [100, 5400, '文德蓝光未来城'],
-                        [110, 5000, '阳光生态城'],
-                        [120, 4800, '翡翠城二期'],
-                        [130, 4600, '阳光生态城二期'],
-                        [140, 5200, '东湖锦城'],
-                        [150, 5000, '滨江壹号'],
-                        [70, 6500, '阳光云景台'],
-                        [75, 6200, '阳光璀璨江山'],
-                        [105, 5300, '阳光浣溪台'],
-                        [115, 4900, '阳光龙湾生态城'],
-                        [125, 4700, '阳光书香九里']
-                    ],
+                    data: [],
                     itemStyle: {
                         opacity: 0.8,
                         borderColor: '#fff',
                         borderWidth: 1
                     }
                 }]
+            };
+            priceAreaChart.setOption(priceAreaOption);
+
+            // 使用$.get加载数据
+            $.get('data\\avgPriceAndArea.json', function (data) {
+                // data为数组，每项为[面积, 均价, 小区名]
+                priceAreaOption.series[0].data = data;
+                priceAreaChart.setOption(priceAreaOption);
             });
 
             // 各小区房源数量TOP10
@@ -319,6 +325,7 @@
                 }]
             });
 
+            
             // 窗口大小变化时重新调整图表大小
             window.addEventListener('resize', function() {
                 priceChart.resize();
