@@ -8,6 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 
 matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 显示中文
 matplotlib.rcParams['axes.unicode_minus'] = False    # 正常显示负号
@@ -126,12 +127,16 @@ def data_preprocessing(xlsx_path):
         面积  方位编码  区域编码     总价      均价    房间数  客厅数  卫生间数  建造年份  楼层编码   总楼层  房龄编码
     0  81.97    5        8      260000.0   3172.0    3       2      2       2023     2       26.0     1
     '''
+    # 保存清洗后的数据
+    df.to_excel('project/dataAnalysis/result/cleaned_data.xlsx', index=False)
+    print('数据预处理完成，清洗后的数据已保存到 project/dataAnalysis/result/cleaned_data.xlsx')
     return df
 
-def data_analysis_visualization(df):
+def data_analysis_visualization(preprocessed_data_path):
     '''
     数据分析可视化函数
     '''
+    df = pd.read_excel(preprocessed_data_path)
     # 3. 探索性数据分析
     # 绘制数值特征分布
     plt.figure(figsize=(20, 16))
@@ -154,6 +159,7 @@ def data_analysis_visualization(df):
     plt.tight_layout()
     plt.savefig('project/dataAnalysis/result/值特征分布.png')
     plt.close()
+    print('数值特征分布图已保存到 project/dataAnalysis/result/值特征分布.png')
 
     # 相关性热图
     plt.figure(figsize=(12, 8))
@@ -161,11 +167,13 @@ def data_analysis_visualization(df):
     plt.title('特征相关性热力图')
     plt.savefig('project/dataAnalysis/result/特征相关性热力图.png')
     plt.close()
+    print('特征相关性热力图已保存到 project/dataAnalysis/result/特征相关性热力图.png')
 
-def data_analysis_modeling(df):
+def data_analysis_modeling(preprocessed_data_path):
     '''
     数据分析建模函数
     '''
+    df = pd.read_excel(preprocessed_data_path)
     # 4. 建模
     # 选择特征和目标变量
     features = ['面积', '方位编码', '区域编码', '房间数', '客厅数', '卫生间数', '建造年份', '楼层编码', '总楼层', '房龄编码']
@@ -201,7 +209,6 @@ def data_analysis_modeling(df):
     print('R2:', r2_score(y_test, y_pred))
 
     # 保存模型
-    import joblib
     joblib.dump(model, 'project/dataAnalysis/result/house_price_rf_model.pkl')
     print('模型已保存到 project/dataAnalysis/result/house_price_rf_model.pkl')
 
@@ -211,16 +218,27 @@ def data_analysis_modeling(df):
     R2: 0.8741610260856343
     '''
 
-# 5. 预测未来几年房价趋势 (2026-2030)
-# def predict_future_prices():
+# 5. 预测未来几年房价趋势
+def predict_future_prices(model,preprocessed_data_path,years,png_save_path):
+
 
 
 if __name__ == "__main__":
-    # 设置数据文件路径
+    # 设置源数据文件路径
     xlsx_path = 'project\data\CleanData\cleanData.xlsx'
-    # 调用数据预处理函数
-    df = data_preprocessing(xlsx_path)
-    # 调用数据分析可视化函数
-    data_analysis_visualization(df)
-    # 调用数据分析建模函数
-    data_analysis_modeling(df)
+    # 设置预处理后的数据保存路径
+    preprocessed_data = 'project/dataAnalysis/result/preprocessed_data.xlsx'
+
+    # # 调用数据预处理函数
+    # df = data_preprocessing(xlsx_path)
+    # # 调用数据分析可视化函数
+    # data_analysis_visualization(preprocessed_data)
+    # # 调用数据分析建模函数
+    # data_analysis_modeling(preprocessed_data)
+
+    # 预测未来房价趋势
+    years = 5  
+    model = joblib.load('project/dataAnalysis/result/house_price_rf_model.pkl')
+    png_save_path='project/dataAnalysis/result/未来几年房价预测.png'
+    predict_future_prices(model,preprocessed_data,years,png_save_path)
+    
