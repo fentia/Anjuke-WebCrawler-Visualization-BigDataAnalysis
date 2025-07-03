@@ -59,7 +59,7 @@
             </div>
 
             <!-- 三张分析图片展示 -->
-             <!-- 主要特征分布图 -->
+            <!-- 主要特征分布图 -->
             <div class="chart-container full-width img-text-row" style="height:auto;">
                 <div class="img-col">
                     <img class="enlarge-img" data-src="imgs/值特征分布.png" src="imgs/值特征分布.png" alt="主要特征分布图">
@@ -67,7 +67,7 @@
                 <div class="text-col">
                     <div class="chart-title">主要特征分布图</div>
                     <p>
-                        该图展示了房产数据中各主要特征（如面积、均价、建造年份、总楼层等）的分布情况。通过查看特征分布，可以了解市场主流房源的属性特征，发现数据异常或极端值，为后续分析和建模做准备。大部分房源面积集中在100㎡左右，均价分布较为集中，建造年份以近十年为主，部分特征如楼层、朝向等也有明显分布规律。
+                        本图展示了房产数据中面积、均价、建造年份、总楼层等主要特征的分布情况。通过观察这些分布，可以了解市场主流房源的属性特征，及时发现异常或极端值，为后续分析和建模提供基础。大部分房源面积集中在100㎡左右，均价分布较为集中，建造年份以近十年为主，楼层和朝向等特征也呈现明显规律。
                     </p>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 <div class="text-col">
                     <div class="chart-title">特征相关性热力图</div>
                     <p>
-                        该图展示了房产各个特征（如面积、房间数、建造年份等）之间的相关性系数矩阵。通过分析特征间的相关性，可以帮助我们发现哪些变量对房价等核心指标影响较大，从而为特征选择和建模提供依据。如图所示，面积与总价、均价、房间数等特征有较强正相关，建造年份与房价相关性较弱，部分特征间存在负相关关系。这说明面积、房间数等是影响房价的重要因素。
+                        本图展示了房产各特征（如面积、房间数、建造年份等）之间的相关性。分析相关性有助于发现影响房价的重要因素，为特征选择和建模提供依据。可以看出，面积与总价、均价、房间数等特征正相关较强，建造年份与房价相关性较弱，部分特征间存在负相关，说明面积和房间数对房价影响较大。
                     </p>
                 </div>
             </div>
@@ -91,11 +91,10 @@
                 <div class="text-col">
                     <div class="chart-title">未来5年房价预测趋势</div>
                     <p>
-                        该图展示了基于历史数据和模型预测的未来5年房价总价的变化趋势。通过预测未来房价走势，可以为购房者、投资者和决策者提供参考，辅助判断买卖时机。预测结果显示，未来5年房价可能先小幅上升后逐步回落，2029年有较明显下降趋势，提示市场存在波动风险。
+                        本图基于历史数据和模型预测的未来5年房价总价的变化趋势。通过预测未来房价走势，可以为购房者、投资者和决策者提供参考，辅助判断买卖时机。预测结果显示，未来5年房价可能先小幅上升后逐步回落，2029年有较明显下降趋势，提示市场存在波动风险。
                     </p>
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -451,7 +450,7 @@
 
     <!-- 图片放大模态框 -->
     <div id="imgModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;">
-        <span id="imgModalClose" style="position:absolute;top:30px;right:50px;font-size:40px;color:#fff;cursor:pointer;">&times;</span>
+        <span id="imgModalClose" title="关闭大图" style="position:absolute;top:30px;right:50px;font-size:40px;color:#fff;cursor:pointer;" aria-label="关闭">&times;</span>
         <img id="imgModalImg" src="" alt="大图" style="max-width:90vw;max-height:90vh;display:block;margin:auto;box-shadow:0 0 20px #000;">
     </div>
 </body>
