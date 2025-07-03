@@ -279,8 +279,6 @@ def predict_future_prices(scaler, model, preprocessed_data_path, years, png_save
     plt.close()
     print(f'未来{years}年房价预测趋势图已保存到 {save_path}')
 
-
-
 if __name__ == "__main__":
     # 设置源数据文件路径
     xlsx_path = 'project\data\CleanData\cleanData.xlsx'
