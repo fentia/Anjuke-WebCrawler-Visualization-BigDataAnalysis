@@ -59,6 +59,18 @@
             </div>
 
             <!-- 三张分析图片展示 -->
+             <!-- 主要特征分布图 -->
+            <div class="chart-container full-width img-text-row" style="height:auto;">
+                <div class="img-col">
+                    <img class="enlarge-img" data-src="imgs/值特征分布.png" src="imgs/值特征分布.png" alt="主要特征分布图">
+                </div>
+                <div class="text-col">
+                    <div class="chart-title">主要特征分布图</div>
+                    <p>
+                        该图展示了房产数据中各主要特征（如面积、均价、建造年份、总楼层等）的分布情况。通过查看特征分布，可以了解市场主流房源的属性特征，发现数据异常或极端值，为后续分析和建模做准备。大部分房源面积集中在100㎡左右，均价分布较为集中，建造年份以近十年为主，部分特征如楼层、朝向等也有明显分布规律。
+                    </p>
+                </div>
+            </div>
             <!-- 特征相关性热力图 -->
             <div class="chart-container full-width img-text-row" style="height:auto;">
                 <div class="img-col">
@@ -83,24 +95,8 @@
                     </p>
                 </div>
             </div>
-            <!-- 主要特征分布图 -->
-            <div class="chart-container full-width img-text-row" style="height:auto;">
-                <div class="img-col">
-                    <img class="enlarge-img" data-src="imgs/值特征分布.png" src="imgs/值特征分布.png" alt="主要特征分布图">
-                </div>
-                <div class="text-col">
-                    <div class="chart-title">主要特征分布图</div>
-                    <p>
-                        该图展示了房产数据中各主要特征（如面积、均价、建造年份、总楼层等）的分布情况。通过查看特征分布，可以了解市场主流房源的属性特征，发现数据异常或极端值，为后续分析和建模做准备。大部分房源面积集中在100㎡左右，均价分布较为集中，建造年份以近十年为主，部分特征如楼层、朝向等也有明显分布规律。
-                    </p>
-                </div>
-            </div>
+            
         </div>
-    </div>
-
-    <div id="imgModal" class="img-modal">
-        <span id="imgModalClose" class="img-modal-close">&times;</span>
-        <img id="imgModalImg" class="img-modal-content">
     </div>
 
     <script>
@@ -429,23 +425,34 @@
                 priceAreaChart.resize();
                 communityChart.resize();
             });
+        });
 
-            // 图片点击放大
+        // 图片点击放大功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 图片点击放大功能
             document.querySelectorAll('.enlarge-img').forEach(function(img) {
                 img.addEventListener('click', function() {
-                    document.getElementById('imgModalImg').src = img.getAttribute('data-src');
-                    document.getElementById('imgModal').style.display = 'flex';
+                    var modal = document.getElementById('imgModal');
+                    var modalImg = document.getElementById('imgModalImg');
+                    modal.style.display = 'flex';
+                    modalImg.src = img.getAttribute('data-src') || img.src;
                 });
             });
-            document.getElementById('imgModalClose').onclick = function() {
+            document.getElementById('imgModalClose').onclick = function(e) {
                 document.getElementById('imgModal').style.display = 'none';
+                e.stopPropagation(); // 防止冒泡到模态框
             };
+            // 点击模态框外部关闭
             document.getElementById('imgModal').onclick = function(e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
-                }
+                if (e.target === this) this.style.display = 'none';
             };
         });
     </script>
+
+    <!-- 图片放大模态框 -->
+    <div id="imgModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;">
+        <span id="imgModalClose" style="position:absolute;top:30px;right:50px;font-size:40px;color:#fff;cursor:pointer;">&times;</span>
+        <img id="imgModalImg" src="" alt="大图" style="max-width:90vw;max-height:90vh;display:block;margin:auto;box-shadow:0 0 20px #000;">
+    </div>
 </body>
 </html>
