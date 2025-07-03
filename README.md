@@ -2,6 +2,10 @@
 
 本项目为安居客二手房价数据的全流程实战项目，涵盖数据采集、清洗、统计分析及可视化，适用于成都/南充等地二手房市场研究。项目采用 Selenium 爬虫自动采集数据，结合 pandas、numpy、scikit-learn 等主流数据分析库，支持多维度统计与可视化展示。
 
+## 在线演示
+
+你可以通过在线网页访问项目可视化与分析结果：[https://ajkksh.pages.dev/](https://ajkksh.pages.dev/)
+
 ## 目录结构
 
 ```
@@ -11,11 +15,16 @@ project/
   ├── 南充二手房价爬虫.py       # 主爬虫程序
   ├── data/
   │   ├── CleanData/           # 清洗后数据（json/xlsx）
-  │   └── OriginalData/        # 原始爬取数据
-  ├── dataProcessing/          # 数据清洗与统计分析脚本
-  ├── dataAnalysis/            # 深度数据分析与报告
-  │   └── result/              # 分析结果输出
+  │   └── OriginalData/        # 爬取到的原始数据
+  ├── dataProcessing/          # 数据清洗与数据统计脚本
+  ├── dataAnalysis/            # 深度数据分析
+  │   └── result/              # 数据分析结果
   └── dataVisualization/       # 数据可视化前端页面（HTML+JS+CSS）
+      ├── assets/              # 静态资源
+      ├── js/                  # 前端交互与可视化脚本
+      ├── css/                 # 样式表文件
+      ├── data/                # 前端展示用的静态数据
+      └── index.html           # 可视化主页面入
 ```
 
 ## 项目功能
