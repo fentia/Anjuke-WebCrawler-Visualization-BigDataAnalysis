@@ -60,7 +60,7 @@
 
             <!-- 三张分析图片展示 -->
             <!-- 主要特征分布图 -->
-            <div class="chart-container full-width img-text-row" style="height:auto;">
+            <div class="chart-container full-width img-text-row">
                 <div class="img-col">
                     <img class="enlarge-img" data-src="imgs/值特征分布.png" src="imgs/值特征分布.png" alt="主要特征分布图">
                 </div>
@@ -72,7 +72,7 @@
                 </div>
             </div>
             <!-- 特征相关性热力图 -->
-            <div class="chart-container full-width img-text-row" style="height:auto;">
+            <div class="chart-container full-width img-text-row">
                 <div class="img-col">
                     <img class="enlarge-img" data-src="imgs/特征相关性热力图.png" src="imgs/特征相关性热力图.png" alt="特征相关性热力图">
                 </div>
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <!-- 未来5年房价预测趋势 -->
-            <div class="chart-container full-width img-text-row" style="height:auto;">
+            <div class="chart-container full-width img-text-row">
                 <div class="img-col">
                     <img class="enlarge-img" data-src="imgs/未来5年房价预测趋势.png" src="imgs/未来5年房价预测趋势.png" alt="未来5年房价预测趋势">
                 </div>
@@ -100,9 +100,9 @@
 
     <script src="js/main.js"></script>
     <!-- 图片放大模态框 -->
-    <div id="imgModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;">
-        <span id="imgModalClose" title="关闭大图" style="position:absolute;top:30px;right:50px;font-size:40px;color:#fff;cursor:pointer;" aria-label="关闭">&times;</span>
-        <img id="imgModalImg" src="" alt="大图" style="max-width:90vw;max-height:90vh;display:block;margin:auto;box-shadow:0 0 20px #000;">
+    <div id="imgModal">
+        <span id="imgModalClose" title="关闭大图" aria-label="关闭">&times;</span>
+        <img id="imgModalImg" src="" alt="大图">
     </div>
 </body>
 </html>

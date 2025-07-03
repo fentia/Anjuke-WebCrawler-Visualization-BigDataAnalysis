@@ -51,30 +51,78 @@ body {
     grid-column: 1 / -1;
 }
 
+/* 图片-文字并排行样式 */
 .img-text-row {
+    height: auto;
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
     gap: 32px;
     margin-bottom: 32px;
 }
 
-.img-text-row .img-col {
+.img-col {
     flex: 0 0 320px;
-    max-width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.img-text-row .img-col img {
+.img-col img {
     width: 100%;
-    height: auto;
-    display: block;
+    max-width: 320px;
     border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
 }
 
-.img-text-row .text-col {
+.img-col img:hover {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+
+.text-col {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+/* 图片放大模态框样式 */
+#imgModal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+#imgModal.show {
+    display: flex;
+}
+
+#imgModalClose {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+#imgModalImg {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: block;
+    margin: auto;
+    box-shadow: 0 0 20px #000;
+    border-radius: 8px;
 }
 
 @media (max-width: 768px) {
