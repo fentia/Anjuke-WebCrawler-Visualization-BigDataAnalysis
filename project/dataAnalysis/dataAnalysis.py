@@ -32,9 +32,9 @@ def data_preprocessing(xlsx_path):
     le = LabelEncoder()
 
     # 户型
-    df['房间数'] = df['户型'].str.extract(r'(\d+)室')[0].astype(int)
-    df['客厅数'] = df['户型'].str.extract(r'(\d+)厅')[0].astype(int)
-    df['卫生间数'] = df['户型'].str.extract(r'(\d+)卫')[0].astype(int)
+    df['房间数'] = df['户型'].str.extract(r'(/d+)室')[0].astype(int)
+    df['客厅数'] = df['户型'].str.extract(r'(/d+)厅')[0].astype(int)
+    df['卫生间数'] = df['户型'].str.extract(r'(/d+)卫')[0].astype(int)
 
     # 面积
     df['面积'] = df['面积'].str.replace('㎡', '').astype(float)
@@ -46,7 +46,7 @@ def data_preprocessing(xlsx_path):
     df['均价'] = df['均价'].str.replace('元/㎡', '').astype(float)
 
     # 建造年份
-    df['建造年份'] = df['时间'].str.extract(r'(\d{4})年建造')[0].astype(int)
+    df['建造年份'] = df['时间'].str.extract(r'(/d{4})年建造')[0].astype(int)
 
     # 楼层 & 楼层编码
     df['楼层类别'] = df['楼层'].str.extract(r'([低中高]层)')[0]
@@ -61,7 +61,7 @@ def data_preprocessing(xlsx_path):
     '''
 
     # 总楼层
-    df['总楼层'] = df['楼层'].str.extract(r'共(\d+)层')[0].astype(float)
+    df['总楼层'] = df['楼层'].str.extract(r'共(/d+)层')[0].astype(float)
 
     # 区域 & 区域编码
     nanchong_districts = ['顺庆区', '高坪区', '嘉陵区', '阆中市', '南部县', '营山县', '蓬安县', '仪陇县', '西充县']
@@ -281,20 +281,28 @@ def predict_future_prices(scaler, model, preprocessed_data_path, years, png_save
 
 if __name__ == "__main__":
     # 设置源数据文件路径
-    xlsx_path = 'project\data\CleanData\cleanData.xlsx'
+    xlsx_path = 'project/data/CleanData/cleanData.xlsx'
+
     # 设置预处理后的数据保存路径
     preprocessed_data = 'project/dataAnalysis/result/preprocessed_data.xlsx'
 
     # # 调用数据预处理函数
     # df = data_preprocessing(xlsx_path)
+
     # # 调用数据分析可视化函数
     # data_analysis_visualization(preprocessed_data)
+
     # # 调用数据分析建模函数
     # data_analysis_modeling(preprocessed_data)
 
     # 预测未来房价趋势
-    years = 5
+    # 预测未来5年房价
+    years = 5 
+    # 加载标准化器
     scaler_pkl = joblib.load('project/dataAnalysis/result/scaler.pkl')
+    # 加载模型
     model_pkl = joblib.load('project/dataAnalysis/result/house_price_rf_model.pkl')
+    # 保存预测结果的路径
     png_save_path='project/dataAnalysis/result'
+    # 调用预测函数
     predict_future_prices(scaler_pkl,model_pkl,preprocessed_data,years,png_save_path)
