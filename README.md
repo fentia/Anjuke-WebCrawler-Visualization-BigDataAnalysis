@@ -58,8 +58,8 @@ pip install --only-binary=:all: statsmodels
    ```sh
    python project/南充二手房价爬虫.py
    ```
-3. 使用 `project/dataProcessing/` 下脚本进行数据清洗与统计分析。
-4. 运行 `project/dataAnalysis/` 下脚本生成分析报告。
+3. 使用 `project/dataProcessing/` 下脚本进行数据清洗与数据统计。
+4. 运行 `project/dataAnalysis/` 下脚本进行深度建模分析。
 5. 打开 `project/dataVisualization/index.html` 查看可视化结果，可根据需要调整参数。
 
 ## 数据分析与建模说明
