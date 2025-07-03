@@ -11,6 +11,8 @@ import seaborn as sns
 
 matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 显示中文
 matplotlib.rcParams['axes.unicode_minus'] = False    # 正常显示负号
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置中文字体为黑体
+plt.rcParams['axes.unicode_minus'] = False    # 正常显示负号
 
 # 1. 加载数据
 df = pd.read_excel('project\data\CleanData\cleanData.xlsx')
@@ -118,7 +120,55 @@ df = df[['面积','方位编码','区域编码','总价', '均价', '房间数',
 '''
 # 处理后的数据格式
     面积  方位编码  区域编码     总价      均价    房间数  客厅数  卫生间数  建造年份  楼层编码   总楼层  房龄编码
-0  81.97    5       8      260000.0   3172.0    3       2      2       2023     2       26.0      1
+0  81.97    5        8      260000.0   3172.0    3       2      2       2023     2       26.0     1
 '''
 
 # 3. 探索性数据分析
+# 绘制数值特征分布
+plt.figure(figsize=(20, 16))
+for i, column in enumerate(['面积', '总价', '均价', '建造年份', '总楼层', '楼层编码', '方位编码', '区域编码'], 1):
+    plt.subplot(4, 2, i)
+    sns.histplot(df[column], kde=True)
+    plt.title(f'{column} 分布')
+    if column == '均价':
+        plt.xlim(0, 20000)
+    if column == '总价':
+        plt.xlim(0, 2500000)
+    if column == '总楼层':
+        plt.xlim(0, 50)
+    if column == '楼层编码':
+        plt.xticks(ticks=np.arange(0, 4), labels=['低层', '中层', '高层', '未知'])
+    if column == '方位编码':
+        plt.xticks(ticks=np.arange(0, 10), labels=['东', '东北', '东南', '东西', '北', '南', '西', '西北', '西南', '未知'])
+    if column == '区域编码':
+        plt.xticks(ticks=np.arange(0, 9), labels=['顺庆区', '高坪区', '嘉陵区', '阆中市', '南部县', '营山县', '蓬安县', '仪陇县', '西充县'])
+plt.tight_layout()
+plt.savefig('project/dataAnalysis/result/值特征分布.png')
+plt.close()
+
+# 相关性热图
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('特征相关性热图')
+plt.savefig('project/dataAnalysis/result/相关性热力图.png')
+plt.close()
+
+# 4. 建模
+# 选择特征和目标变量
+
+
+# 填补缺失值（用均值填充）
+
+
+# 划分训练集和测试集
+
+
+# 标准化特征
+
+
+# 定义模型
+
+
+# 训练和评估模型
+
+# 5. 预测未来几年房价趋势 (2026-2030)
