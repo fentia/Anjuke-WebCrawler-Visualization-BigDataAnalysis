@@ -5,10 +5,12 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.impute import SimpleImputer
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
+import datetime
 
 matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 显示中文
 matplotlib.rcParams['axes.unicode_minus'] = False    # 正常显示负号
@@ -182,28 +184,28 @@ def data_analysis_modeling(preprocessed_data_path):
     y = df[target]
 
     # 填补缺失值（用均值填充）
-    from sklearn.impute import SimpleImputer
+
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
 
     # 划分训练集和测试集
-    from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 标准化特征
-    from sklearn.preprocessing import StandardScaler
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
+    # 保存标准化器
+    joblib.dump(scaler, 'project/dataAnalysis/result/scaler.pkl')
+    print('标准化器已保存到 project/dataAnalysis/result/scaler.pkl')
+
     # 定义模型(随机森林回归模型)
-    from sklearn.ensemble import RandomForestRegressor
     model = RandomForestRegressor(random_state=42)
 
     # 训练和评估模型
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
     print('MSE:', mean_squared_error(y_test, y_pred))
     print('MAE:', mean_absolute_error(y_test, y_pred))
     print('R2:', r2_score(y_test, y_pred))
@@ -219,7 +221,63 @@ def data_analysis_modeling(preprocessed_data_path):
     '''
 
 # 5. 预测未来几年房价趋势
-def predict_future_prices(model,preprocessed_data_path,years,png_save_path):
+def predict_future_prices(scaler, model, preprocessed_data_path, years, png_save_path):
+    '''
+    scale: 标准化器
+    model: 训练好的模型
+    preprocessed_data_path: 预处理后的数据路径
+    years: 预测的年数
+    png_save_path: 预测结果保存路径
+    '''
+    df = pd.read_excel(preprocessed_data_path)
+
+    # 特征字段
+    features = ['面积', '方位编码', '区域编码', '房间数', '客厅数', '卫生间数', '建造年份', '楼层编码', '总楼层', '房龄编码']
+    
+    # 取中位数构造一个“典型样本”
+    base_sample = df[features].median().values.reshape(1, -1)
+
+    # 收集预测结果
+    future_years = []
+    predicted_prices = []
+
+    for i in range(years):
+        modified_sample = base_sample.copy()
+
+        # 模拟“建造年份”增加，表示新楼盘
+        modified_sample[0][features.index('建造年份')] += i
+
+        # 模拟“房龄编码”降低（假设新房更普遍，房龄更短）
+        modified_sample[0][features.index('房龄编码')] = max(0, modified_sample[0][features.index('房龄编码')] - i)
+
+        # 模拟“总楼层”变化：高层趋势明显
+        modified_sample[0][features.index('总楼层')] += i % 3
+
+        # 标准化
+        scaled_sample = scaler.transform(modified_sample)
+
+        # 模型预测
+        predicted_price = model.predict(scaled_sample)[0]
+
+        future_years.append(2025 + i)
+        predicted_prices.append(predicted_price)
+
+    # 绘图展示趋势
+    plt.figure(figsize=(10, 6))
+    plt.plot(future_years, predicted_prices, marker='o', linestyle='-', color='blue')
+    plt.xlabel('年份')
+    plt.ylabel('预测房价（元）')
+    plt.title('未来{}年房价预测趋势'.format(years))
+    plt.xticks(future_years)  # 只显示整数年份
+    for i, price in enumerate(predicted_prices):
+        plt.text(future_years[i], predicted_prices[i], f'{int(price):,}', ha='center', va='bottom')
+    plt.grid(True)
+    plt.tight_layout()
+
+    save_path = f'{png_save_path}/未来{years}年房价预测趋势.png'
+    plt.savefig(save_path)
+    plt.close()
+    print(f'未来{years}年房价预测趋势图已保存到 {save_path}')
 
 
 
@@ -237,8 +295,8 @@ if __name__ == "__main__":
     # data_analysis_modeling(preprocessed_data)
 
     # 预测未来房价趋势
-    years = 5  
-    model = joblib.load('project/dataAnalysis/result/house_price_rf_model.pkl')
-    png_save_path='project/dataAnalysis/result/未来几年房价预测.png'
-    predict_future_prices(model,preprocessed_data,years,png_save_path)
-    
+    years = 5
+    scaler_pkl = joblib.load('project/dataAnalysis/result/scaler.pkl')
+    model_pkl = joblib.load('project/dataAnalysis/result/house_price_rf_model.pkl')
+    png_save_path='project/dataAnalysis/result'
+    predict_future_prices(scaler_pkl,model_pkl,preprocessed_data,years,png_save_path)
