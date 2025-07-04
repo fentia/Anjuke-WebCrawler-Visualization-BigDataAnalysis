@@ -229,51 +229,57 @@ def predict_future_prices(scaler, model, preprocessed_data_path, years, png_save
     years: 预测的年数
     png_save_path: 预测结果保存路径
     '''
+    # 读取预处理后的数据
     df = pd.read_excel(preprocessed_data_path)
 
-    # 特征字段
+    # 特征字段列表，需与训练模型时保持一致
     features = ['面积', '方位编码', '区域编码', '房间数', '客厅数', '卫生间数', '建造年份', '楼层编码', '总楼层', '房龄编码']
     
-    # 取中位数构造一个“典型样本”
+    # 以各特征的中位数构造一个“典型样本”，用于未来趋势预测
     base_sample = df[features].median().values.reshape(1, -1)
 
-    # 收集预测结果
+    # 用于存储未来年份和对应预测房价
     future_years = []
     predicted_prices = []
 
+    # 循环预测未来years年
     for i in range(years):
+        # 拷贝典型样本，逐年调整特征
         modified_sample = base_sample.copy()
 
-        # 模拟“建造年份”增加，表示新楼盘
+        # “建造年份”每年递增，模拟新楼盘
         modified_sample[0][features.index('建造年份')] += i
 
-        # 模拟“房龄编码”降低（假设新房更普遍，房龄更短）
+        # “房龄编码”每年递减，假设新房比例提升，房龄更短，最小为0
         modified_sample[0][features.index('房龄编码')] = max(0, modified_sample[0][features.index('房龄编码')] - i)
 
-        # 模拟“总楼层”变化：高层趋势明显
+        # “总楼层”每年变化，模拟高层趋势（每3年+1层）
         modified_sample[0][features.index('总楼层')] += i % 3
 
-        # 标准化
+        # 标准化特征，保持与训练时一致
         scaled_sample = scaler.transform(modified_sample)
 
-        # 模型预测
+        # 用训练好的模型预测房价
         predicted_price = model.predict(scaled_sample)[0]
 
+        # 记录年份和预测结果
         future_years.append(2025 + i)
         predicted_prices.append(predicted_price)
 
-    # 绘图展示趋势
+    # 绘制未来房价趋势图
     plt.figure(figsize=(10, 6))
     plt.plot(future_years, predicted_prices, marker='o', linestyle='-', color='blue')
-    plt.xlabel('年份')
-    plt.ylabel('预测房价（元）')
-    plt.title('未来{}年房价预测趋势'.format(years))
+    plt.xlabel('年份')  # x轴标签
+    plt.ylabel('预测房价（元）')  # y轴标签
+    plt.title('未来{}年房价预测趋势'.format(years))  # 图标题
     plt.xticks(future_years)  # 只显示整数年份
+    # 在每个点上标注预测房价
     for i, price in enumerate(predicted_prices):
         plt.text(future_years[i], predicted_prices[i], f'{int(price):,}', ha='center', va='bottom')
     plt.grid(True)
     plt.tight_layout()
 
+    # 保存图片到指定路径
     save_path = f'{png_save_path}/未来{years}年房价预测趋势.png'
     plt.savefig(save_path)
     plt.close()
